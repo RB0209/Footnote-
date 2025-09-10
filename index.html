@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>A Goodbye Note — Love Letter (fixed with animation)</title>
 
-  <!-- Google Fonts for handwritten effect -->
+  <!-- Google Fonts: Poppins (readable) + handwritten for the paper -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Great+Vibes&family=Shadows+Into+Light&family=Indie+Flower&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Homemade+Apple&family=Great+Vibes&family=Shadows+Into+Light&family=Indie+Flower&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -54,7 +54,8 @@
     .env-flap{position:absolute;left:50%;top:0;transform:translateX(-50%);width:0;height:0;border-left:calc(50% - 12px) solid transparent;border-right:calc(50% - 12px) solid transparent;border-bottom:var(--flap-height) solid #f2d8d0;transform-origin:top center;z-index:4;transition:transform 900ms cubic-bezier(.2,.9,.3,1);background-image:var(--paper-texture)}
     .envelope.open .env-flap{transform:translateX(-50%) rotateX(-180deg)}
 
-    .env-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:'Homemade Apple','Shadows Into Light','Indie Flower','Great Vibes',cursive;color:#5b2b2b;font-size:clamp(24px,3.5vw,36px);letter-spacing:1.2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,0.06);z-index:5;pointer-events:none}
+    /* Envelope label now uses a readable sans-serif (Poppins) */
+    .env-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;color:var(--accent-strong);font-weight:600;font-size:clamp(18px,2.5vw,28px);letter-spacing:0.6px;text-transform:none;text-shadow:none;z-index:5;pointer-events:none}
 
     .paper{position:fixed;left:50%;top:48%;transform:translate(-50%,-30%) scale(0.88);width:var(--paper-width);max-height:calc(100vh - 64px);height:var(--paper-height);background:#fffefc var(--paper-texture);background-size:cover;box-shadow:0 40px 120px rgba(16,10,8,0.32);border-radius:10px;padding:56px 64px;opacity:0;visibility:hidden;transition:transform 420ms cubic-bezier(.2,.9,.3,1), opacity 240ms ease, visibility 0ms linear 240ms;overflow:auto;z-index:20;border:1px solid rgba(0,0,0,0.06)}
     .paper::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 28px,rgba(255,150,150,0.07) 29px);pointer-events:none;border-radius:10px}
@@ -128,7 +129,7 @@ Your Real Fictional Character</div>
     let focusableElements=[];
     let focusTrapHandler=null;
 
-    function updateFocusable(){focusableElements=Array.from(paper.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'));}
+    function updateFocusable(){focusableElements=Array.from(paper.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'));}    
     function trapFocus(e){if(e.key==='Tab'){if(focusableElements.length===0){e.preventDefault();return;}const first=focusableElements[0];const last=focusableElements[focusableElements.length-1];if(e.shiftKey){if(document.activeElement===first){e.preventDefault();last.focus();}}else{if(document.activeElement===last){e.preventDefault();first.focus();}}}else if(e.key==='Escape'){closeEnvelope();}}
 
     function openEnvelope(){if(envelope.classList.contains('open')){updateFocusable();(focusableElements[0]||paper).focus();return;}lastFocused=document.activeElement;envelope.classList.add('open');envelope.setAttribute('aria-expanded','true');overlay.classList.add('show');overlay.setAttribute('aria-hidden','false');paper.classList.add('show');paper.setAttribute('aria-hidden','false');paper.setAttribute('role','dialog');paper.setAttribute('aria-modal','true');document.documentElement.style.overflow='hidden';updateFocusable();(focusableElements[0]||paper).focus();focusTrapHandler=trapFocus;document.addEventListener('keydown',focusTrapHandler);srStatus.textContent='Letter opened';}
